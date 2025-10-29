@@ -1,0 +1,68 @@
+useDynLib(FactorCopulaModel,.registration = TRUE)
+import(cubature)
+import(VineCopula)
+
+importFrom("grDevices", "rainbow")
+importFrom("graphics", "abline", "axis", "box", "lines", "par", "points")
+importFrom("stats", "approxfun", "cor", "integrate", "lm", "nlm", "pt", "qnorm", "qt", "rchisq", "rnorm", "runif", "varimax")
+importFrom("igraph", "graph.adjacency","E","E<-","get.edgelist","get.edges","minimum.spanning.tree")
+
+export(bb1_td2cpar)
+export(corDis)
+export(corvec2mat)
+export(pcor2load)
+export(isPosDef)
+export(gaussLegendre)
+export(posDefHessMin, posDefHessMinb)
+export(nscore)
+export(uscore)
+export(semiCor, semiCorTable, bvnSemiCor)
+export(zetaDep, zetaDepC)
+export(zetaPlot)
+export(tailDep) 
+export(rhoS) 
+
+export(rmvn, rmvt) 
+export(qcondbvtcop) 
+export(qcondFrank)
+export(frank_rhoS2cpar, frank_beta2cpar) 
+export(gumbel_rhoS2cpar, gumbel_beta2cpar)
+export(bb1_tau2eqtd, bb1_cpar2td) 
+export(bvn_cpar2tau)
+export(cparBounds)
+
+
+export(r1factor)
+export(onefactorcop_nllk)
+export(d1factcop)
+export(ml1factor, ml1factor_v2)
+export(ml1factor_f90)
+export(onefactorEstWithProxy) # uses VineCopula
+export(latentUpdate1factor1, latentUpdate1factor) 
+
+export(pfactor_fa, pfactor_nllk) 
+export(mvtPfact, mvtPfact_nllk)
+
+export(rbifactor)
+export(bifactor2cor, bifactor2cor_v2)
+export(bifactor_fa, bifactor_nllk)
+export(bifactorcop_nllk)
+export(mvtBifact, mvtBifact_nllk)
+#export(bifactScore_fan)
+export(bifactorScore) # HJ version
+export(bifactorEstWithProxy)
+export(latentUpdateBifactor) 
+
+export(rnestfactor)
+export(nestfactorcop_nllk)
+
+export(oblique_fa, oblique_nllk)
+export(oblique_grad_fa)
+export(oblique_grad_nllk)
+export(oblique_par2load)
+export(oblique_pp_par2load) 
+
+# from FactorTrVine
+# residDep, RVtrunc2cor not exported
+export(gauss1f1t)  # this depends on library(igraph)
+export(factor1trvine_nllk)  

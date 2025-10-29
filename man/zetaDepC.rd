@@ -1,0 +1,101 @@
+\name{zetaDepC}
+\alias{zetaDepC}
+\title{Upper Tail-weighted dependence measure zeta(C,alpha)}
+\description{
+Upper Tail-weighted dependence measure zeta(C,alpha)
+}
+
+\usage{
+zetaDepC(cpar,pcop,alpha,zero=0,iGL=FALSE,gl=0)
+}
+\arguments{
+\item{cpar}{copula parameter (vector) of pcop}
+\item{pcop}{copula cdf C, assume this takes vectorized form for u,v}
+\item{alpha}{scalar alpha>0 for zeta measure}
+\item{zero}{tolerance to use for zero if integrate is used, e.g., 0.0001}
+\item{iGL}{TRUE to use Gauss-Legendre quadrature}
+\item{gl}{Gauss-Legendre quadratureobject  with nodes/weights if iGL=TRUE}
+}
+\value{
+ zeta(C,alpha) ; this is upper tail-weighted is alpha>>1}
+\details{
+zeta(alpha)=2+alpha-alpha/integral
+integral int_0^1 C( x^(1/alpha), x^(1/alpha) ) dx.
+This is a central dependence of measure if alpha =1 and upper tail-weighted is alpha>>1.
+}
+\references{
+Lee D, Joe H, Krupskii P (2018). J Nonparametric Statistics, 30(2), 262-290
+}
+\examples{
+# Bivariate margin of 1-factor copula
+# using conditional cdf via VineCopula::BiCopHfunc2
+# cpar1 = par,par2 for fam1 for first variable
+# cpar2 = par,par2 for fam2 for second variable
+# family codes 1:Gaussian, 2:t, 4:Gumbel, 5:Frank, 7:BB1, 14:survGumbel 17:survBB1
+p1factbiv = function(u1,u2,cpar1,cpar2,fam1,fam2,nq)
+{ if(length(u1)==1) u1 = rep(u1,nq)
+  if(length(u2)==1) u2 = rep(u2,nq)
+  gl = gaussLegendre(nq)
+  wl = gl$weights
+  vl = gl$nodes
+  a1 = VineCopula::BiCopHfunc2(u1,vl,family=fam1,par=cpar1[1], par2=cpar1[2])
+  a2 = VineCopula::BiCopHfunc2(u2,vl,family=fam2,par=cpar2[1], par2=cpar2[2])
+  sum(wl*a1*a2)
+}
+#
+# Version of zeta(C) for bivariate margin of 1-factor copula
+zetaDepC_1factor = function(cpar1,cpar2,fam1,fam2,nq,alpha,zero=0,iGL=FALSE,gl=0)
+{ a1 = 1/alpha
+  gfn = function(x) 
+  { nn = length(x)
+    gval = rep(0,nn)
+    # need this form because of nesting in p1factbiv()
+    for(ii in 1:nn) 
+    { xx = x[ii]^a1
+      gval[ii] = p1factbiv(xx,xx,cpar1,cpar2,fam1,fam2,nq) 
+    }
+    gval
+  }
+  if(iGL)
+  { xq = gl$nodes
+    wq = gl$weight
+    tem = sum(wq*gfn(xq))
+  }
+  else
+  { tem = integrate(gfn,zero,1-zero)
+  tem = tem$value
+  }
+  zeta = 2+alpha-alpha/tem
+  zeta
+}
+# Tests for zeta
+param = matrix(c(0.5,1.5,0.6,1.2),2,2,byrow=TRUE)
+# Create BB1 copula cdf pbb1 and  BB1 surival copula cdf pbb1r using BiCopCDF
+pbb1_VC = function(u,v,cpar) { VineCopula::BiCopCDF(u,v,family=7,par=cpar[1],par2=cpar[2]) }
+pbb1r_VC = function(u,v,cpar) { VineCopula::BiCopCDF(u,v,family=17,par=cpar[1],par2=cpar[2]) }
+gl21 = gaussLegendre(21)
+zeta1u_bb1 = zetaDepC(param[1,],pbb1_VC,alpha=10,zero=0.00001,iGL=TRUE,gl=gl21)
+zeta1l_bb1 = zetaDepC(param[1,],pbb1r_VC,alpha=10,zero=0.00001,iGL=TRUE,gl=gl21)
+cat(zeta1u_bb1,zeta1l_bb1,"\n")
+# 0.4504351 0.4776329 
+zeta2u_bb1 = zetaDepC(param[2,],pbb1_VC,alpha=10,zero=0.00001,iGL=TRUE,gl=gl21)
+zeta2l_bb1 = zetaDepC(param[2,],pbb1r_VC,alpha=10,zero=0.00001,iGL=TRUE,gl=gl21)
+cat(zeta2u_bb1,zeta2l_bb1,"\n")
+# 0.2825654 0.419787 
+# Bivariate margin of 1-factor copula: linking BB1(param1) and BB1(param2) 
+# Upper tail
+zetau_ai = zetaDepC_1factor(param[1,],param[2,],fam1=7,fam2=7,nq=21,alpha=10,
+zero=0.00001,iGL=FALSE,gl=0)
+zetau_gl = zetaDepC_1factor(param[1,],param[2,],fam1=7,fam2=7,nq=21,alpha=10,
+zero=0.00001,iGL=TRUE,gl=gl21)
+cat(zetau_ai,zetau_gl,"\n")
+# 0.1766584 0.1775621
+# Lower tail
+zetal_ai = zetaDepC_1factor(param[1,],param[2,],fam1=17,fam2=17,nq=21,alpha=10,
+zero=0.00001,iGL=FALSE,gl=0)
+zetal_gl = zetaDepC_1factor(param[1,],param[2,],fam1=17,fam2=17,nq=21,alpha=10,
+zero=0.00001,iGL=TRUE,gl=gl21)
+cat(zetal_ai,zetal_gl,"\n")
+# 0.2664287 0.26737
+# Ordering is expected based on the individual BB1(param1) and BB1(param2)
+}
