@@ -83,9 +83,11 @@ bifactor_nllk = function(rhvec,grsize,Robs,nsize)
 #' d = ncol(rmat)
 #' grsize = rainstorm$grsize
 #' fa1 = pfactor_fa(1,start=rep(0.8,d),cormat=rmat,n=n,prlevel=1)
-#' fa2 = pfactor_fa(2,start=rep(0.8,2*d),cormat=rmat,n=n,prlevel=1)
+#' st2 = c(rep(0.7,d),rep(0.2,grsize[1]+grsize[2]),rep(0.6,grsize[3]))
+#' fa2 = pfactor_fa(2,start=st2,cormat=rmat,n=n,prlevel=1,mxiter=50)
+#' # some sensitivity to starting point because of non-identiabilty due to rotation
 #' st3 = c(rep(0.7,grsize[1]),rep(0.1,d),rep(0.7,grsize[2]),rep(0.1,d),rep(0.7,grsize[3]))
-#' fa3 = pfactor_fa(3,start=st3,cormat=rmat,n=n,prlevel=1)
+#' fa3 = pfactor_fa(3,start=st3,cormat=rmat,n=n,prlevel=1,mxiter=50)
 #' names(fa3)
 #' loadmat_rotated = fa3$loading%*%fa3$rotmat # more values closer to 0
 #' # compare factanal
@@ -93,7 +95,8 @@ bifactor_nllk = function(rhvec,grsize,Robs,nsize)
 #' compare = cbind(loadmat_rotated,fa3b$loadings)
 #' print(round(compare,3)) # order of factors is different but interpretation similar
 #' #
-#' bifa = bifactor_fa(grsize,start=c(rep(0.8,d),rep(0.2,d)),cormat=rmat,n=n,prlevel=1)
+#' bifa = bifactor_fa(grsize,start=c(rep(0.8,d),rep(0.2,d)),cormat=rmat,n=n,
+#'    prlevel=1,mxiter=70)
 #' mgrp = length(grsize)
 #' # oblique factor model is much more parsimonious than bi-factor
 #' obfa = oblique_fa(grsize,start=rep(0.7,d+mgrp), cormat=rmat, n=n, prlevel=1)

@@ -249,7 +249,7 @@ end subroutine
 
 !   theta=cparv(1); delta=cparv(2)
 
-!   call mderivs2(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
+!   call mderivs(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
 !   mp1=1.d0+m; msq=m*m; thsq=theta*theta
 !   lmp1=log(mp1); logm=log(m);
 
@@ -392,7 +392,7 @@ end subroutine
 ! ! lderu = \p lpdf/\p u, \p^2 lpdf/\p u^2, \p^2 lpdf/\p u th, \p^2 lpdf/\p u delta  4d-vector
 ! ! lderv = \p lpdf/\p v, \p^2 lpdf/\p v^2, \p^2 lpdf/\p v th, \p^2 lpdf/\p v delta  4d-vector
 ! ! lderuv= \p^2 lpdf/\p uv
-! ! subroutine lbb1derivs(u1,u2,cparv,lpdf,lder11,lder22,lderu,lderv,lderuv)
+! ! subroutine lbb1derivs2(u1,u2,cparv,lpdf,lder11,lder22,lderu,lderv,lderuv)
 ! !   implicit none
 ! !   double precision u1,u2,cparv(2),lpdf,lder11(2),lder22(3)
 ! !   double precision theta,delta,der1th,der1dl,der2th,der2dl,derthd
@@ -410,7 +410,7 @@ end subroutine
 ! !   theta=cparv(1); delta=cparv(2);
 ! ! 
 ! !   
-! !   call  mderivs(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,mderu,mderv,mder2uv)
+! !   call  mderivs2(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,mderu,mderv,mder2uv)
 ! !   print*,mderu
 ! !   print*,mderv
 ! !   mder1u=mderu(1);mder2u=mderu(2);mder2uth=mderu(3);mder2udl=mderu(4)
@@ -862,7 +862,7 @@ end subroutine
 ! !   mder2th = \p^2 m/\p theta^2
 ! !   mder2dl = \p^2 m/\p delta^2
 ! !   mderthd = \p^2 m/\p theta \p delta
-! ! subroutine mderivs(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,&
+! ! subroutine mderivs2(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,&
 ! ! mderu,mderv,mder2uv)
 ! !   implicit none
 ! !   double precision u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd
@@ -955,7 +955,7 @@ end subroutine
 ! !   mder2th = \p^2 m/\p theta^2
 ! !   mder2dl = \p^2 m/\p delta^2
 ! !   mderthd = \p^2 m/\p theta \p delta
-! subroutine mderivs2(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
+! subroutine mderivs(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
 !   implicit none
 !   double precision u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd
 !   double precision t1,t2,tu1,tu2,ttu1,ttu2,td01,td02,td11,td12,td21,td22

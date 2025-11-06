@@ -109,7 +109,7 @@ subroutine strfrkdif(npar,th,mgrp,n,dvar,fam,grsize,udata,lat,nq,wl,xl,nllk,grad
             nj=mj+mgrp
             call lcop2derivt(uvec(mj),lat(i,jg),th((/nj,nj+dvar/)),fam(mj),lpdf(nj),lder11,lder22,lder1u,lder2u,&
               ldermixuu,lder1v,lder2v,lder2uv,ldermixvv)
-            !call lbb1derivs(uvec(mj),lat(i,jg),th((/nj,nj+dvar/)),lpdf(nj),der1bb1,der2bb1,lderu,lderv,lderuv)   !c_{ij,V_j}   
+            !call lbb1derivs2(uvec(mj),lat(i,jg),th((/nj,nj+dvar/)),lpdf(nj),der1bb1,der2bb1,lderu,lderv,lderuv)   !c_{ij,V_j}   
             !der1((/nj,nj+dvar/)) = der1bb1
             !der2((/nj,nj+2*dvar,nj+dvar/)) = der2bb1
             der1((/nj,nj+dvar/))=lder11
@@ -231,7 +231,7 @@ subroutine strfrkdif(npar,th,mgrp,n,dvar,fam,grsize,udata,lat,nq,wl,xl,nllk,grad
 !             nj=mj+mgrp
 !             tem=th((/nj,nj+dvar+mgrp/))
 !             th_tem=RESHAPE(tem,(/2,1/))
-!             call lbb1derivs(uvec(mj),lat(i,jg),th_tem,lpdf(nj),lder11,lder22,lderu,lderv,lderuv)
+!             call lbb1derivs2(uvec(mj),lat(i,jg),th_tem,lpdf(nj),lder11,lder22,lderu,lderv,lderuv)
 !             ! call lcop2derivt(uvec(mj),lat(i,jg),th_tem,fam(mj),lpdf(nj),lder11,lder22,&
 !             ! lder1u,lder2u,ldermixuu,lder1v,lder2v,lder2uv,ldermixvv) 
 !              der1((/nj,nj+dd/))=lder11
@@ -324,7 +324,7 @@ subroutine strfrkdif(npar,th,mgrp,n,dvar,fam,grsize,udata,lat,nq,wl,xl,nllk,grad
 ! !   mder2th = \p^2 m/\p theta^2
 ! !   mder2dl = \p^2 m/\p delta^2
 ! !   mderthd = \p^2 m/\p theta \p delta
-! subroutine mderivs(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,&
+! subroutine mderivs2(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,&
 ! mderu,mderv,mder2uv)
 !   implicit none
 !   double precision u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd
@@ -416,7 +416,7 @@ subroutine strfrkdif(npar,th,mgrp,n,dvar,fam,grsize,udata,lat,nq,wl,xl,nllk,grad
 ! !lderu = \p lpdf/\p u, \p^2 lpdf/\p u^2, \p^2 lpdf/\p u th, \p^2 lpdf/\p u delta  4d-vector
 ! !lderv = \p lpdf/\p v, \p^2 lpdf/\p v^2, \p^2 lpdf/\p v th, \p^2 lpdf/\p v delta  4d-vector
 ! !lderuv= \p^2 lpdf/\p uv
-! subroutine lbb1derivs(u1,u2,cparv,lpdf,lder11,lder22,lderu,lderv,lderuv)
+! subroutine lbb1derivs2(u1,u2,cparv,lpdf,lder11,lder22,lderu,lderv,lderuv)
 !   implicit none
 !   double precision u1,u2,cparv(2),lpdf,lder11(2),lder22(3)
 !   double precision theta,delta,der1th,der1dl,der2th,der2dl,derthd
@@ -434,7 +434,7 @@ subroutine strfrkdif(npar,th,mgrp,n,dvar,fam,grsize,udata,lat,nq,wl,xl,nllk,grad
 !   theta=cparv(1); delta=cparv(2);
 ! 
 !   
-!   call  mderivs(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,mderu,mderv,mder2uv)
+!   call  mderivs2(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,mderu,mderv,mder2uv)
 !   !print*,mderu
 !   !print*,mderv
 !   mder1u=mderu(1);mder2u=mderu(2);mder2uth=mderu(3);mder2udl=mderu(4)

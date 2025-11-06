@@ -225,7 +225,7 @@ end
 !
 !  theta=cparv(1); delta=cparv(2)
 !
-!  call mderivs2(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
+!  call mderivs(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
 !  mp1=1.d0+m; msq=m*m; thsq=theta*theta
 !  lmp1=log(mp1); logm=log(m);
 !
@@ -272,41 +272,41 @@ end
 !   mder2th = \p^2 m/\p theta^2
 !   mder2dl = \p^2 m/\p delta^2
 !   mderthd = \p^2 m/\p theta \p delta
-subroutine mderivs2(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
-  implicit none
-  double precision u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd
-  double precision t1,t2,tu1,tu2,ttu1,ttu2,td01,td02,td11,td12,td21,td22
-  double precision s,sder1th,sder1dl,sder2th,sder2dl,sderthd,m1,ts,m1der1dl 
-  double precision t1a,t2a,dlsq,dlcu
-
-  t1 = u1**(-theta); t2 = u2**(-theta)
-  t1a=t1-1.d0; t2a=t2-1.d0
-  tu1 = -log(u1); tu2 = -log(u2)
-  ttu1 = log(t1a); ttu2 = log(t2a)
-  td01 = (t1a)**delta; td02 = (t2a)**delta
-  td11=td01/t1a; td12=td02/t2a;
-  td21=td11/t1a; td22=td12/t2a;
- 
-  s = td01+td02
-  sder1th = delta*(td11*t1*tu1+td12*t2*tu2)
-  sder1dl = td01*ttu1+td02*ttu2
-  sder2th = delta*(delta-1.d0)*(td21*t1*t1*tu1*tu1+td22*t2*t2*tu2*tu2)
-  sder2th = sder2th+delta*(td11*t1*tu1*tu1+td12*t2*tu2*tu2)
-  sder2dl = td01*ttu1*ttu1+td02*ttu2*ttu2
-  sderthd = sder1th/delta+delta*(td11*ttu1*tu1*t1+td12*ttu2*tu2*t2)
-
-  m = s**(1.d0/delta); m1 = m/s
-  ts = log(s)
-  dlsq=delta*delta; dlcu=delta*dlsq
-  mder1th = m1*sder1th/delta
-  mder1dl = m1*sder1dl/delta - m*ts/dlsq
-  m1der1dl = mder1dl/s - m*sder1dl/s**2
-  mder2th = (1.d0-delta)*m1*sder1th**2/(dlsq*s)+m1*sder2th/delta
-  mder2dl = 2.d0*m*ts/dlcu-mder1dl*ts/dlsq-2.d0*m1*sder1dl/dlsq
-  mder2dl = mder2dl+sder2dl*m1/delta+sder1dl*m1der1dl/delta
-  mderthd = -m1*sder1th/dlsq+sder1th*m1der1dl/delta+m1*sderthd/delta
-  return
-end
+!subroutine mderivs(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
+!  implicit none
+!  double precision u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd
+!  double precision t1,t2,tu1,tu2,ttu1,ttu2,td01,td02,td11,td12,td21,td22
+!  double precision s,sder1th,sder1dl,sder2th,sder2dl,sderthd,m1,ts,m1der1dl 
+!  double precision t1a,t2a,dlsq,dlcu
+!
+!  t1 = u1**(-theta); t2 = u2**(-theta)
+!  t1a=t1-1.d0; t2a=t2-1.d0
+!  tu1 = -log(u1); tu2 = -log(u2)
+!  ttu1 = log(t1a); ttu2 = log(t2a)
+!  td01 = (t1a)**delta; td02 = (t2a)**delta
+!  td11=td01/t1a; td12=td02/t2a;
+!  td21=td11/t1a; td22=td12/t2a;
+! 
+!  s = td01+td02
+!  sder1th = delta*(td11*t1*tu1+td12*t2*tu2)
+!  sder1dl = td01*ttu1+td02*ttu2
+!  sder2th = delta*(delta-1.d0)*(td21*t1*t1*tu1*tu1+td22*t2*t2*tu2*tu2)
+!  sder2th = sder2th+delta*(td11*t1*tu1*tu1+td12*t2*tu2*tu2)
+!  sder2dl = td01*ttu1*ttu1+td02*ttu2*ttu2
+!  sderthd = sder1th/delta+delta*(td11*ttu1*tu1*t1+td12*ttu2*tu2*t2)
+!
+!  m = s**(1.d0/delta); m1 = m/s
+!  ts = log(s)
+!  dlsq=delta*delta; dlcu=delta*dlsq
+!  mder1th = m1*sder1th/delta
+!  mder1dl = m1*sder1dl/delta - m*ts/dlsq
+!  m1der1dl = mder1dl/s - m*sder1dl/s**2
+!  mder2th = (1.d0-delta)*m1*sder1th**2/(dlsq*s)+m1*sder2th/delta
+!  mder2dl = 2.d0*m*ts/dlcu-mder1dl*ts/dlsq-2.d0*m1*sder1dl/dlsq
+!  mder2dl = mder2dl+sder2dl*m1/delta+sder1dl*m1der1dl/delta
+!  mderthd = -m1*sder1th/dlsq+sder1th*m1der1dl/delta+m1*sderthd/delta
+!  return
+!end
 
 ! Function with BB8 condcdf C_{1|2}(u1|u2;theta,delta) for factor 1, and
 ! ccdf cder1(2), cder2(3) (partial wrt param, 1st and 2nd order),

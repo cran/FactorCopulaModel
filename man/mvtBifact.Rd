@@ -20,6 +20,7 @@ mvtBifact(tdata,start,grsize,df,prlevel=2,model="bifactor",mxiter=100)
 \value{
  nlm object with ($code,$estimate,$gradient,$iterations,$minimum)}
 \examples{
+\donttest{
 data(rainstorm)
 udat = rainstorm$uprecip
 d = ncol(udat)
@@ -43,7 +44,9 @@ st3 = c(rep(0.7,grsize[1]),rep(0.1,d),rep(0.7,grsize[2]),rep(0.1,d),rep(0.7,grsi
 out3t = mvtPfact(tdata,st3,pfact=3,df=df,prlevel=1)
 cat(bif$minimum, nestf$minimum, out1t$minimum, out2t$minimum, out3t$minimum,"\n")
 }
+}
 \details{
 Note the minimum nllk can be the same for different parameter vectors
 if some group size values are 1 or 2.
 }
+

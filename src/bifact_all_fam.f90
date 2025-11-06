@@ -114,7 +114,7 @@ subroutine strbb1frk2proxy(npar,th,mgrp,n,dvar,grsize,udata,vlat,nllk,grad,hess)
             call lfrk2derivs(ccdf(mj),vlat(i,jg+1),th(2*dvar+mj),lpdf(dvar+mj),der1(2*dvar+mj),der2(3*dvar+mj),&
                  der1u(mj),der2u(mj),derumix(mj))   
             !c_{ij,V_0}
-            call lbb1derivs(uvec(mj),vlat(i,1),th((/mj,mj+dvar/)),lpdf(mj),der1bb1,der2bb1,lderu,lderv,lderuv)
+            call lbb1derivs2(uvec(mj),vlat(i,1),th((/mj,mj+dvar/)),lpdf(mj),der1bb1,der2bb1,lderu,lderv,lderuv)
             !call lbb1derivs(uvec(mj),vlat(i,1),th((/mj,mj+dvar/)),lpdf(mj),der1bb1,der2bb1)                                           
             der1((/mj,mj+dvar/)) = der1bb1
             der2((/mj,mj+2*dvar,mj+dvar/)) = der2bb1  
@@ -564,7 +564,7 @@ subroutine bifactproxy(npar,th,mgrp,n,dvar,family,grsize,udata,vlat,nllk,grad,he
           !         llpdf(dvar+mj),der1(2*dvar+mj),der2(3*dvar+mj),&
           !                       der1u(mj),der2u(mj),derumix(mj))
     
-          !         call lbb1derivs(uvec(mj),vlat(i,1),th((/mj,mj+dvar/)),llpdf(mj),lder11,lder22,lderu,lderv,lderuv) !c_{ij,V_0}  
+          !         call lbb1derivs2(uvec(mj),vlat(i,1),th((/mj,mj+dvar/)),llpdf(mj),lder11,lder22,lderu,lderv,lderuv) !c_{ij,V_0}  
           !          der1((/mj,mj+dvar/)) = lder11
           !          der2((/mj,mj+2*dvar,mj+dvar/)) = lder22
                 
@@ -578,7 +578,7 @@ subroutine bifactproxy(npar,th,mgrp,n,dvar,family,grsize,udata,vlat,nllk,grad,he
           !         llpdf(dvar+mj),der1(2*dvar+mj),der2(3*dvar+mj),&
           !                       der1u(mj),der2u(mj),derumix(mj))
                 
-          !        call lbb1derivs(1.0d0-uvec(mj),1.0d0-vlat(i,1),th((/mj,mj+dvar/)),llpdf(mj),lder11,lder22,lderu,lderv,lderuv) !c_{ij,V_0}
+          !        call lbb1derivs2(1.0d0-uvec(mj),1.0d0-vlat(i,1),th((/mj,mj+dvar/)),llpdf(mj),lder11,lder22,lderu,lderv,lderuv) !c_{ij,V_0}
           !          der1((/mj,mj+dvar/)) = lder11
           !          der2((/mj,mj+2*dvar,mj+dvar/)) = lder22
                  
@@ -792,7 +792,7 @@ subroutine bifactproxy(npar,th,mgrp,n,dvar,family,grsize,udata,vlat,nllk,grad,he
 
 !   theta=cparv(1); delta=cparv(2)
 
-!   call mderivs2(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
+!   call mderivs(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
 !   mp1=1.d0+m; msq=m*m; thsq=theta*theta
 !   lmp1=log(mp1); logm=log(m);
 
@@ -924,7 +924,7 @@ subroutine bifactproxy(npar,th,mgrp,n,dvar,family,grsize,udata,vlat,nllk,grad,he
 
 
 
-! subroutine lbb1derivs(u1,u2,cparv,lpdf,lder11,lder22,lderu,lderv,lderuv)
+! subroutine lbb1derivs2(u1,u2,cparv,lpdf,lder11,lder22,lderu,lderv,lderuv)
 !   implicit none
 !   double precision u1,u2,cparv(2),lpdf,lder11(2),lder22(3)
 !   double precision theta,delta,der1th,der1dl,der2th,der2dl,derthd
@@ -942,7 +942,7 @@ subroutine bifactproxy(npar,th,mgrp,n,dvar,family,grsize,udata,vlat,nllk,grad,he
 !   theta=cparv(1); delta=cparv(2);
 
   
-!   call  mderivs(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,mderu,mderv,mder2uv)
+!   call  mderivs2(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,mderu,mderv,mder2uv)
   
 !   mder1u=mderu(1);mder2u=mderu(2);mder2uth=mderu(3);mder2udl=mderu(4)
 !   mder1v=mderv(1);mder2v=mderv(2);mder2vth=mderv(3);mder2vdl=mderv(4);
@@ -1320,7 +1320,7 @@ subroutine bifactproxy(npar,th,mgrp,n,dvar,family,grsize,udata,vlat,nllk,grad,he
 
 
 
-! subroutine mderivs(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,&
+! subroutine mderivs2(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,&
 ! mderu,mderv,mder2uv)
 !   implicit none
 !   double precision u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd
@@ -1400,7 +1400,7 @@ subroutine bifactproxy(npar,th,mgrp,n,dvar,family,grsize,udata,vlat,nllk,grad,he
 
 
 
-! subroutine mderivs2(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
+! subroutine mderivs(u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd)
 !   implicit none
 !   double precision u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd
 !   double precision t1,t2,tu1,tu2,ttu1,ttu2,td01,td02,td11,td12,td21,td22

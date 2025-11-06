@@ -1,6 +1,6 @@
 Package: FactorCopulaModel
 Title: Factor Copula Models
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Harry", "Joe", role = "aut"),
     person("Pavel", "Krupskii", email = "pavel.krupskiy@unimelb.edu.au", role = c("aut","cre")),
@@ -14,7 +14,7 @@ Imports: cubature, igraph, VineCopula
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
-Packaged: 2025-10-25 06:04:23 UTC; krups
+Packaged: 2025-11-06 05:46:30 UTC; krups
 Author: Harry Joe [aut],
   Pavel Krupskii [aut, cre],
   Xinyao Fan [aut],
@@ -24,4 +24,4 @@ Author: Harry Joe [aut],
 Maintainer: Pavel Krupskii <pavel.krupskiy@unimelb.edu.au>
 Depends: R (>= 3.5.0)
 Repository: CRAN
-Date/Publication: 2025-10-29 20:00:11 UTC
+Date/Publication: 2025-11-06 07:50:01 UTC

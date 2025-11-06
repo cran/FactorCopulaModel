@@ -68,11 +68,11 @@ subroutine latupdate3 (th,n,d,udata,nq,xl,wl,family,lat)
         t1=qt(uvec(j),nu);t2=qt(xl(iq),nu);
         call lt2derivs(t1,t2,rho,nu,lpdf,lder1,lder2,ltder1u,ltder2u,ltdermix)
       elseif(family(j)==7) then
-        call lbb1derivs(uvec(j),xl(iq),th(jj),lpdf,lder11,lder22,lderu,lderv,lderuv)
+        call lbb1derivs2(uvec(j),xl(iq),th(jj),lpdf,lder11,lder22,lderu,lderv,lderuv)
       elseif(family(j)==17) then
         ut=1.0d0-uvec(j)
         vt=1.0d0-xl(iq)
-        call lbb1derivs(ut,vt,th(jj),lpdf,lder11,lder22,lderu,lderv,lderuv)
+        call lbb1derivs2(ut,vt,th(jj),lpdf,lder11,lder22,lderu,lderv,lderuv)
       elseif(family(j)==10) then
         call lbb8derivs(uvec(j),xl(iq),th(jj),lpdf,lder11,lder22,lderu,lderv,lderuv)
       elseif(family(j)==20) then
@@ -129,7 +129,7 @@ end subroutine
 !lderu = \p lpdf/\p u, \p^2 lpdf/\p u^2, \p^2 lpdf/\p u th, \p^2 lpdf/\p u delta  4d-vector
 !lderv = \p lpdf/\p v, \p^2 lpdf/\p v^2, \p^2 lpdf/\p v th, \p^2 lpdf/\p v delta  4d-vector
 !lderuv= \p^2 lpdf/\p uv
-! subroutine lbb1derivs(u1,u2,cparv,lpdf,lder11,lder22,lderu,lderv,lderuv)
+! subroutine lbb1derivs2(u1,u2,cparv,lpdf,lder11,lder22,lderu,lderv,lderuv)
 !   implicit none
 !   double precision u1,u2,cparv(2),lpdf,lder11(2),lder22(3)
 !   double precision theta,delta,der1th,der1dl,der2th,der2dl,derthd
@@ -147,7 +147,7 @@ end subroutine
 !   theta=cparv(1); delta=cparv(2);
 
   
-!   call  mderivs(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,mderu,mderv,mder2uv)
+!   call  mderivs2(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,mderu,mderv,mder2uv)
 !   !print*,mderu
 !   !print*,mderv
 !   mder1u=mderu(1);mder2u=mderu(2);mder2uth=mderu(3);mder2udl=mderu(4)
@@ -286,7 +286,7 @@ end subroutine
 ! !   mder2th = \p^2 m/\p theta^2
 ! !   mder2dl = \p^2 m/\p delta^2
 ! !   mderthd = \p^2 m/\p theta \p delta
-! subroutine mderivs(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,&
+! subroutine mderivs2(u1,u2,cparv,m,mder1th,mder1dl,mder2th,mder2dl,mderthd,&
 ! mderu,mderv,mder2uv)
 !   implicit none
 !   double precision u1,u2,theta,delta,m,mder1th,mder1dl,mder2th,mder2dl,mderthd

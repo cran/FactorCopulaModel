@@ -175,7 +175,7 @@ subroutine pfct(d,p,rh,fctmat,fctinv,fctdet,fctldet)
   end if
   if(p==3) then
     rh1 = rh(1:d); rh2= rh((d+1):(2*d)); rh3= rh((2*d+1):(3*d));
-    a3=rh3*sqrt(1.d0-rh1**2)*sqrt(1-rh2**2);
+    a3=rh3*sqrt(1.d0-rh1**2)*sqrt(1.d0-rh2**2);
     a2=rh2*sqrt(1.d0-rh1**2);
     rhe = 1.d0-rh1**2-a2**2-a3**2;
     irhe= 1.d0/rhe;
@@ -411,11 +411,11 @@ subroutine jacobload2pcor(d,p,amat,rhmat,jarr)
     ! problem with next line if denominator is zero
     !jarr(ell,ell,:)=amat(:,ell)/rhmat(:,ell)
     jarr(ell,ell,:)=tem
-    tem=tem*sqrt(1-rhmat(:,ell)**2)
+    tem=tem*sqrt(1.d0-rhmat(:,ell)**2)
   end do
   do ell=1,(p-1)
     do k=(ell+1),p
-      jarr(k,ell,:)=-rhmat(:,ell)*amat(:,k)/(1-rhmat(:,ell)**2)
+      jarr(k,ell,:)=-rhmat(:,ell)*amat(:,k)/(1.d0-rhmat(:,ell)**2)
     end do
   end do
   deallocate (tem)
@@ -481,7 +481,7 @@ subroutine pfactnllk(d,p,rhmat,Robs,n,nllk,grad)
       tr=tr+fctinv(i,j)*Robs(j,i)
     end do
   end do
-  nllk=.5d0*n*(fctldet+tr+d*log(3.14159265358979323846d0*2.d0))
+  nllk=0.5d0*n*(fctldet+tr+d*log(3.14159265358979323846d0*2.d0))
   call derivlogdetdload(d,p,amat,fctinv,lgdtderload)
   call jacobload2pcor(d,p,amat,rhmat,jac)
   ! loop through factors and variables
@@ -504,7 +504,7 @@ subroutine pfactnllk(d,p,rhmat,Robs,n,nllk,grad)
           traceder=traceder+rinvder(j1,j2)*Robs(j2,j1)
         end do
       end do
-      grad(i,k)=.5*n*(lgdtderrho+traceder)
+      grad(i,k)=0.5d0*n*(lgdtderrho+traceder)
     end do
   end do
   deallocate(amat,fctinv,fctmat,rhvec)
@@ -586,7 +586,7 @@ subroutine tpfactnllk(d,p,n,nu,rhmat,tdata,nllk,grad)
         end do
         gr=gr+qfder*nud/qfvec(ii)
       end do
-      grad(i,k)=.5*n*lgdtderrho+gr
+      grad(i,k)=0.5d0*n*lgdtderrho+gr
     end do
   end do
   deallocate(amat,fctinv,fctmat,rhvec)
@@ -631,12 +631,12 @@ subroutine bifct(d,mgrp,grsize,rh1,rh2,fctmat,fctinv,fctdet,fctldet)
   a2=rh2*sqrt(1.d0-rh1**2);
   A=0.d0; Aj=0.d0
   eta=0.d0; etaa=0.d0
-  dzeta1=rh1**2/(1-rh1**2)/(1-rh2**2)
-  dzeta2=a2/(1-rh1**2)/(1-rh2**2)
+  dzeta1=rh1**2/(1.d0-rh1**2)/(1.d0-rh2**2)
+  dzeta2=a2/(1.d0-rh1**2)/(1.d0-rh2**2)
   fctdiag=0.d0
   do jg=1,mgrp
     fctdiag(cmst(jg):cmgr(jg),cmst(jg):cmgr(jg))=1.d0
-    A(jg)=1-grsize(jg)+sum(1.d0/(1-rh2(cmst(jg):cmgr(jg))**2))
+    A(jg)=1.d0-grsize(jg)+sum(1.d0/(1.d0-rh2(cmst(jg):cmgr(jg))**2))
     Aj(cmst(jg):cmgr(jg))=A(jg)
     eta(jg)=sum(dzeta2(cmst(jg):cmgr(jg))*rh1(cmst(jg):cmgr(jg)))
     etaa(cmst(jg):cmgr(jg))=eta(jg)/A(jg)
@@ -649,7 +649,7 @@ subroutine bifct(d,mgrp,grsize,rh1,rh2,fctmat,fctinv,fctdet,fctldet)
   end do
   xi = dzeta1/rh1-etaa*dzeta2
   A0 = 1.d0-sum(eta**2/A)+sum(dzeta1)
-  fctdet = A0*product(A)*product((1-rh1**2)*(1-rh2**2))
+  fctdet = A0*product(A)*product((1.d0-rh1**2)*(1.d0-rh2**2))
   call outer(d,d,xi,xi,fctinv)
   call outer(d,d,dzeta2,dzeta2,tmat)
   do i=1,d
@@ -658,7 +658,7 @@ subroutine bifct(d,mgrp,grsize,rh1,rh2,fctmat,fctinv,fctdet,fctldet)
   end do
   fctinv= -fctinv/A0 - tmat
   do i=1,d
-    fctinv(i,i)=1/(1-rh1(i)**2)/(1-rh2(i)**2) -dzeta2(i)**2/Aj(i)-xi(i)**2/A0
+    fctinv(i,i)=1.d0/(1.d0-rh1(i)**2)/(1.d0-rh2(i)**2) -dzeta2(i)**2/Aj(i)-xi(i)**2/A0
   end do
   deallocate (a2,dzeta1,dzeta2,xi,fctdiag,tmat )
   deallocate (cmgr,cmst,A,Aj,eta,etaa)
@@ -796,7 +796,7 @@ subroutine bifactnllk(d,mgrp,rhmat,grsize,Robs,n,nllk,grad)
       tr=tr+fctinv(i,j)*Robs(j,i)
     end do
   end do
-  nllk=.5d0*n*(fctldet+tr+d*log(3.14159265358979323846d0*2.d0))
+  nllk=0.5d0*n*(fctldet+tr+d*log(3.14159265358979323846d0*2.d0))
   call derivlogdetdloadbif(d,mgrp,amat,fctinv,grsize,lgdtderload)
   call jacobload2pcor(d,2,amat,rhmat,jac)
   ! loop through factors and variables
@@ -819,7 +819,7 @@ subroutine bifactnllk(d,mgrp,rhmat,grsize,Robs,n,nllk,grad)
           traceder=traceder+rinvder(j1,j2)*Robs(j2,j1)
         end do
       end do
-      grad(i,k)=.5*n*(lgdtderrho+traceder)
+      grad(i,k)=0.5d0*n*(lgdtderrho+traceder)
     end do
   end do
   deallocate(amat,fctinv,fctmat,rhvec)
@@ -904,7 +904,7 @@ subroutine tbifactnllk(d,mgrp,grsize,n,nu,rhmat,tdata,nllk,grad)
         end do
         gr=gr+qfder*nud/qfvec(ii)
       end do
-      grad(i,k)=.5*n*lgdtderrho+gr
+      grad(i,k)=0.5d0*n*lgdtderrho+gr
     end do
   end do
   deallocate(amat,fctinv,fctmat,rhvec)
